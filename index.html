@@ -1,15 +1,677 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | New Unity Project</title>
-    <script src="Build/UnityLoader.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duncan Abbot | Engineering</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #1a1a1a;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
+        /* Side Navigation */
+        .side-nav {
+            position: fixed;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 15px;
+            border: 2px solid #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .side-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .side-nav li {
+            margin-bottom: 15px;
+        }
+
+        .side-nav a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+
+        .side-nav a:hover,
+        .side-nav a.active {
+            background-color: #1a1a1a;
+            color: white;
+            font-weight: 700;
+        }
+
+        .side-nav a::before {
+            content: '';
+            margin-right: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 120px;
+            padding: 0;
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 80px 40px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .home-section {
+            padding-top: 40px;
+        }
+
+        .section:nth-child(even) {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Home Section */
+        .home-section {
+            text-align: center;
+            position: relative;
+        }
+
+        .home-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            border: 2px solid #1a1a1a;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #1a1a1a;
+            margin: 0 auto 2rem;
+            display: block;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .name {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        .name::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #1a1a1a, transparent);
+        }
+
+        .title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .bio {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+            font-weight: 400;
+            text-align: left;
+            padding: 20px;
+            border-left: 4px solid #1a1a1a;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .linkedin-link {
+            display: inline-block;
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid #1a1a1a;
+            padding: 0.8rem 2rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            background: white;
+        }
+
+        .linkedin-link:hover {
+            background-color: #1a1a1a;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .linkedin-link::before {
+            content: '→';
+            margin-right: 8px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #1a1a1a;
+            margin-bottom: 3rem;
+            text-align: center;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #1a1a1a, transparent);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-style: italic;
+            overflow: hidden;
+        }
+
+        .project-image img.zoom-out {
+            transform: scale(0.7);
+        }
+
+        .project-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .project-tech {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-link {
+            margin-top: auto;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #1a1a1a;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item strong {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .engineering-cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Technical drawing elements */
+        .tech-line {
+            position: absolute;
+            background: #1a1a1a;
+        }
+
+        .tech-line.horizontal {
+            height: 1px;
+            width: 100px;
+        }
+
+        .tech-line.vertical {
+            width: 1px;
+            height: 100px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .side-nav {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .section {
+                padding: 40px 20px;
+            }
+            
+            .name {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+            
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .bio {
+                font-size: 1rem;
+                text-align: center;
+            }
+
+            .section-header {
+                font-size: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-image {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <ul>
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#current-projects" class="nav-link">Current Projects</a></li>
+            <li><a href="#prior-work" class="nav-link">Prior Work</a></li>
+            <li><a href="#services" class="nav-link">Services</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Section -->
+        <section id="home" class="section home-section">
+            <div class="container">
+                <img src="headshot.jpeg" alt="Duncan Abbot" class="profile-image">
+                <h1 class="name">DUNCAN ABBOT</h1>
+                <p class="title">Entrepreneur / Engineer / Product Manager<span class="engineering-cursor">_</span></p>
+                <p class="bio">
+                    Hello there! I recently left my product management position
+                    at a unicorn health tech company to take a sabbatical. I'm running a few cool
+                    projects and would love to connect with anyone interested.
+                    I'm also offering consulting and tutoring services in my areas of expertise,
+                    which include AI, product development, physics, math, engineering, robotics, and software.
+                </p>
+            </div>
+        </section>
+
+        <!-- Current Projects Section -->
+        <section id="current-projects" class="section">
+            <div class="container">
+                <h2 class="section-header">CURRENT PROJECTS</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image"><img src="highlandbiscuits.png" alt="Highland Biscuits" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">Highland Biscuits</h3>
+                        <p class="project-description">
+                            Gluten-free biscuit pop-up in downtown Brooklyn, NYC. 
+                            Making delicious breakfast biscuits available for a braoder audience.
+                            Inspired by a Scottish biscuit I had before my gluten allergy.
+                        </p>
+                        <p class="project-tech">Food Service, Entrepreneurship, Local Business</p>
+                        <p class="project-link"><a href="https://highlandbiscuits.com" target="_blank" style="color: #1a1a1a; text-decoration: none;">highlandbiscuits.com →</a></p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"><img src="zenbul.png" alt="Zenbul" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">Zenbul</h3>
+                        <p class="project-description">
+                            Automated farming platform designed to make agriculture 
+                            more cost-effective and resilient to climate change. Uses aeroponics and AI
+                            to optimize plant growth and yield.
+                        </p>
+                        <p class="project-tech">Robotics, Agriculture, Climate Tech, Automation</p>
+                        <p class="project-link"><a href="https://zenbul.com" target="_blank" style="color: #1a1a1a; text-decoration: none;">zenbul.com →</a></p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"><img src="game_dev.jpg" alt="Game Development" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">Game Development - Title TBD</h3>
+                        <p class="project-description">
+                            Creating a D&D-like multiplayer RPG game focused on unique
+                            character specialization, deep crafting and balancing gameplay
+                            between casual and competitive players.
+                        </p>
+                        <p class="project-tech">Game Development, Interactive Media, Creative Technology</p>
+                        <p class="project-link">More details coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prior Work Section -->
+        <section id="prior-work" class="section">
+            <div class="container">
+                <h2 class="section-header">PRIOR WORK</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-image"><img src="cadence.png" alt="Cadence Solutions" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">Cadence Solutions - Senior Product Manager</h3>
+                        <p class="project-description">
+                            Led AI and provider-facingproduct work for a health tech company focused on remote patient monitoring 
+                            and chronic disease management. Worked with major health systems to reduce hospital admissions 
+                            and improve patient outcomes through innovative care delivery systems.
+                        </p>
+                        <p class="project-tech">Product Management, Health Tech, Remote Patient Monitoring</p>
+                        <p class="project-link"><a href="https://www.cadence.care/" target="_blank" style="color: #1a1a1a; text-decoration: none;">cadence.care →</a></p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image">
+                            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/-71vEpKT34U?si=SJwTxWmNloo-8x2j" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border-radius: 5px;"></iframe>
+                        </div>
+                        <h3 class="project-title">Gwydion - CEO & Founder</h3>
+                        <p class="project-description">
+                            CEO and co-founder of a VR/AR software development company based in Ann Arbor, MI. 
+                            Created Arthea, a platform for research and university-level education that enables 
+                            collaborative virtual environments for 3D content manipulation and annotation. Customers
+                            included Dupont, Stanford, and the University of Michigan.
+                        </p>
+                        <p class="project-tech">VR/AR, EdTech, Entrepreneurship, Leadership</p>
+                        <p class="project-link"><a href="https://www.linkedin.com/company/gwydion" target="_blank" style="color: #1a1a1a; text-decoration: none;">LinkedIn →</a></p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"><img src="birds.jpg" alt="BIRDS Lab" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">BIRDS Lab - Robotics Research Engineer</h3>
+                        <p class="project-description">
+                            Conducted research in biologically inspired robotics and dynamical systems at the 
+                            University of Michigan. Worked on tools for rapid prototyping of robotic systems,
+                            VR/AR interfaces, and a patented wireless power system.
+                        </p>
+                        <p class="project-tech">Robotics Research, Biomechanics, Mathematical Modeling</p>
+                        <p class="project-link">
+                            <a href="https://www.birds.eecs.umich.edu/" target="_blank" style="color: #1a1a1a; text-decoration: none;">birds.eecs.umich.edu →</a><br>
+                            <a href="https://ieeexplore.ieee.org/document/9124139" target="_blank" style="color: #1a1a1a; text-decoration: none; font-size: 0.9rem;">IEEE Publication →</a>
+                        </p>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-image"><img src="nasa.jpeg" alt="NASA/JPL" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"></div>
+                        <h3 class="project-title">NASA/JPL - Simulation Software Engineer</h3>
+                        <p class="project-description">
+                            Developed simulation software for repair robots designed for the International Space Station. 
+                            Project used as part of a multi-month astronaut training similation at NASA's HERA facility.
+                        </p>
+                        <p class="project-tech">Space Robotics, Simulation, NASA/JPL, Systems Engineering</p>
+                        <p class="project-link">NASA Jet Propulsion Laboratory</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section">
+            <div class="container">
+                <h2 class="section-header">SERVICES</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3 class="service-title">Product Consulting</h3>
+                        <p class="service-description">
+                            Strategic consulting in AI, healthcare, VR, higher education, and robotics. 
+                            I help with product strategy, data analysis, and customer research to identify 
+                            the most appropriate product solutions for your business needs.
+                        </p>
+                    </div>
+                    <div class="service-card">
+                        <h3 class="service-title">Tutoring & Coaching</h3>
+                        <p class="service-description">
+                            Expert tutoring in STEM topics including advanced mathematics, physics, 
+                            engineering, and robotics. Specializing in high school project coaching 
+                            for end-to-end robotics and software projects for college applications.
+                        </p>
+                    </div>
+                    <div class="service-card">
+                        <h3 class="service-title">Prototyping Services</h3>
+                        <p class="service-description">
+                            Rapid MVP development for robotics, IoT, and software projects. 
+                            I can build functional prototypes quickly to help your business 
+                            get to market signal and validate ideas efficiently.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-header">CONTACT</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <strong>Email:</strong> duncan@zenbul.com
+                        </div>
+                        <div class="contact-item">
+                            <strong>Location:</strong> Brooklyn, NY
+                        </div>
+                        <div class="contact-item">
+                            <strong>LinkedIn:</strong> 
+                            <a href="https://www.linkedin.com/in/duncan-abbot-9b21a684/" target="_blank" style="color: #1a1a1a;">
+                                linkedin.com/in/duncan-abbot-9b21a684/
+                            </a>
+                        </div>
+                    </div>
+                    <p style="color: #666; font-style: italic;">
+                        Ready to discuss your next project? Let's build something amazing together.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <script>
-      UnityLoader.instantiate("unityContainer", "Build/dmlaurel.github.io.json");
+        // Smooth scrolling navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlighting
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
-  </head>
-  <body>
-    <div id="unityContainer" style="width: 800px; height: 450px; margin: auto"></div>
-  </body>
+</body>
 </html>
